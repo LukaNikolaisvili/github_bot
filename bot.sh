@@ -1,45 +1,29 @@
 #!/usr/bin/env bash
-#
-# Commit Bot by Steven Kneiser
-#
-# > https://github.com/theshteves/commit-bot
-#
-# Deploy locally by adding the following line to your crontab:
-# 0 22 * * * /bin/bash /<full-path-to-your-folder>/code/commit-bot/bot.sh
-#
-# Edit your crontab in vim w/ the simple command:
-# crontab -e
-#
-# Deploying just on your computer is better than a server if you want
-# your commits to more realistically mirror your computer usage.
-#
-# ...c'mon, nobody commits EVERY day ;)
-#
 
+# Define the repository URL and directory
+REPO_URL="https://github.com/LukaNikolaisvili/github_bot.git"
+REPO_DIR="/test/github_bot"
+
+# Check if the repository directory exists
+if [ ! -d "$REPO_DIR" ]; then
+  echo "Cloning repository..."
+  git clone $REPO_URL $REPO_DIR
+else
+  echo "Repository already exists. Pulling latest changes..."
+  cd $REPO_DIR || exit 1
+  git pull
+fi
+
+# Navigate to the repository directory
+cd $REPO_DIR || { echo "Failed to change directory to $REPO_DIR"; exit 1; }
+
+# Generate commit information
 info="Commit: $(date)"
-echo "OS detected: $OSTYPE"
-
-case "$OSTYPE" in
-    darwin*)
-        cd "`dirname $0`" || exit 1
-        ;;
-
-    linux*)
-        cd "$(dirname "$(readlink -f "$0")")" || exit 1
-        ;;
-
-    *)
-        echo "OS unsupported (submit an issue on GitHub!)"
-        exit 1
-        ;;
-esac
-
 echo "$info" >> output.txt
 echo "$info"
 echo
 
 # Set up Git to use the public repository URL
-REPO_URL="https://github.com/LukaNikolaisvili/github_bot.git"
 git remote set-url origin $REPO_URL
 
 # Configure Git to handle divergent branches by merging
@@ -52,5 +36,3 @@ git pull
 git add output.txt
 git commit -m "$info"
 git push origin main # or "master" on old setups
-
-cd -
