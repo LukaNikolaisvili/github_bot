@@ -39,7 +39,7 @@ echo "$info"
 echo
 
 # Set up Git to use the public repository URL
-REPO_URL="https://github.com/LukaNikolaisvili/commit-bot.git"
+REPO_URL="https://github.com/LukaNikolaisvili/github_bot.git"
 git remote set-url origin $REPO_URL
 
 # Configure Git to handle divergent branches by merging
