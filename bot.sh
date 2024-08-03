@@ -21,8 +21,8 @@ fi
 cd $REPO_DIR || { echo "Failed to change directory to $REPO_DIR"; exit 1; }
 
 # Fix permissions to ensure Jenkins user can write to the directory
-sudo chown -R jenkins:jenkins $REPO_DIR
-sudo chmod -R 755 $REPO_DIR
+chown -R jenkins:jenkins $REPO_DIR
+chmod -R 755 $REPO_DIR
 
 # Generate commit information
 info="Commit: $(date)"
