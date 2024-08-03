@@ -36,33 +36,7 @@ git config pull.rebase false
 # Pull the latest changes
 git pull
 
-# Function to execute a shell command and check for errors
-execute_command() {
-    command=$1
-    eval $command
-    if [ $? -ne 0 ]; then
-        echo "Command failed: $command"
-        exit 1
-    fi
-}
-
-# Iterate over each day in the past year
-for i in $(seq 1 365); do
-    # Generate a random number of commits for each day
-    for j in $(seq 0 $((RANDOM % 10 + 1))); do
-        # Calculate the date for the commit
-        commit_date=$(date -d "$i days ago" '+%Y-%m-%d %H:%M:%S')
-
-        # Write the commit date to the file
-        echo "Commit on $commit_date" >> file.txt
-
-        # Add the changes to the staging area
-        execute_command 'git add file.txt'
-
-        # Commit the changes with the specified date
-        execute_command "git commit --date=\"$commit_date\" -m \"commit\""
-    done
-done
-
-# Push the changes to the remote repository
-execute_command 'git push -u origin main'
+# Ship it
+git add output.txt
+git commit -m "$info"
+git push origin main # or "master" on old setups
