@@ -2,7 +2,10 @@
 
 # Define the repository URL and directory
 REPO_URL="https://github.com/LukaNikolaisvili/github_bot.git"
-REPO_DIR="/test/github_bot"
+REPO_DIR="/var/jenkins_home/workspace/test/github_bot"
+
+# Ensure the repository directory is safe for Git
+git config --global --add safe.directory $REPO_DIR
 
 # Check if the repository directory exists
 if [ ! -d "$REPO_DIR" ]; then
@@ -17,9 +20,13 @@ fi
 # Navigate to the repository directory
 cd $REPO_DIR || { echo "Failed to change directory to $REPO_DIR"; exit 1; }
 
+# Fix permissions to ensure Jenkins user can write to the directory
+sudo chown -R jenkins:jenkins $REPO_DIR
+sudo chmod -R 755 $REPO_DIR
+
 # Generate commit information
 info="Commit: $(date)"
-echo "$info" >> output.txt
+echo "$info" >> output.txt || { echo "Failed to write to output.txt"; exit 1; }
 echo "$info"
 echo
 
